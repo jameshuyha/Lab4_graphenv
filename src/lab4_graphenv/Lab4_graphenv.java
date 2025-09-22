@@ -46,6 +46,10 @@ public class Lab4_graphenv extends Application {
         Label taxiLabel = new Label("Taxi Charges ($): ");
         Label conferenceLabel = new Label("Conference/Seminar Registration Fees ($): ");
         Label lodgingLabel = new Label("Lodging Charges ($/night): ");
+        Label totalLabel = new Label("");
+        Label allowableLabel = new Label("");
+        Label excessLabel = new Label("");
+        Label savedLabel = new Label("");
         
         // Add labels to GridPane
         gridPane.add(daysLabel, 0, 0);
@@ -56,6 +60,10 @@ public class Lab4_graphenv extends Application {
         gridPane.add(taxiLabel, 0, 5);
         gridPane.add(conferenceLabel, 0, 6);
         gridPane.add(lodgingLabel, 0, 7);
+        gridPane.add(totalLabel, 0, 9, 2, 1);
+        gridPane.add(allowableLabel, 0, 10, 2, 1);
+        gridPane.add(excessLabel, 1, 9, 2, 1);
+        gridPane.add(savedLabel, 1, 10, 2, 1);
         
         // Create text fields
         TextField daysField = new TextField();
@@ -85,8 +93,9 @@ public class Lab4_graphenv extends Application {
         gridPane.add(calculateButton, 0, 8);
         gridPane.add(clearButton, 1, 8);
         
-         // Disable calculate by default
+         // Disable calculate and parking by default
         calculateButton.setDisable(true);
+//        parkingField.setDisable(true);
         
 
         // Disable register if clear is clicked
@@ -102,17 +111,34 @@ public class Lab4_graphenv extends Application {
             calculateButton.setDisable(true);
             carFeesField.setDisable(false);
             milesField.setDisable(false);
+//            parkingField.setDisable(true);
         });
         
         // Enable calculate once days field is filled
         EventHandler textFieldHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent t) {
-                if (!daysField.getText().isEmpty()) {
+                if (!daysField.getText().isEmpty()
+                        && !lodgingField.getText().isEmpty() 
+                        && daysField.getText().matches("^\\d+$") 
+                        && lodgingField.getText().matches("^(?:\\d+(\\.\\d+)?)?$")
+                        && airfareField.getText().matches("^(?:\\d+(\\.\\d+)?)?$") 
+                        && (carFeesField.getText().matches("^(?:\\d+(\\.\\d+)?)?$")
+                        || milesField.getText().matches("^(?:\\d+(\\.\\d+)?)?$"))
+                        && parkingField.getText().matches("^(?:\\d+(\\.\\d+)?)?$")
+                        && conferenceField.getText().matches("^(?:\\d+(\\.\\d+)?)?$")
+                        && taxiField.getText().matches("^(?:\\d+(\\.\\d+)?)?$")) {
                     calculateButton.setDisable(false);
                 } else {
                     calculateButton.setDisable(true);
                 }
+//                
+//                if (!(carFeesField.getText().isEmpty()
+//                        || milesField.getText().isEmpty())) {
+//                    parkingField.setDisable(false);
+//                } else {
+//                    parkingField.setDisable(true);
+//                }
                 
                 if (!carFeesField.getText().isEmpty()) {
                     milesField.setDisable(true);
@@ -131,18 +157,89 @@ public class Lab4_graphenv extends Application {
         EventHandler calculateHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
+                double airfare = 0;
+                double carFees = 0;
+                double parking = 0;
+                double taxi = 0;
+                double conference = 0;
+                double miles = 0;
                 
+                if (airfareField.getText().isEmpty()) {
+                    airfare = 0;
+                } else {
+                    airfare = Double.parseDouble(airfareField.getText());
+                }
+                
+                if (carFeesField.getText().isEmpty()) {
+                    carFees = 0;
+                } else {
+                    carFees = Double.parseDouble(carFeesField.getText());
+                }
+                
+                if (parkingField.getText().isEmpty()) {
+                    parking = 0;
+                } else {
+                    parking = Double.parseDouble(parkingField.getText());
+                }
+                
+                if (taxiField.getText().isEmpty()) {
+                    taxi = 0;
+                } else {
+                    taxi = Double.parseDouble(taxiField.getText());
+                }
+                
+                if (conferenceField.getText().isEmpty()) {
+                    conference = 0;
+                } else {
+                    conference = Double.parseDouble(conferenceField.getText());
+                }
+                
+                if (milesField.getText().isEmpty()) {
+                    miles = 0;
+                } else {
+                    miles = Double.parseDouble(milesField.getText());
+                }
+                
+                double totalExpenses = airfare
+                        + carFees
+                        + parking
+                        + taxi
+                        + conference
+                        + (Double.parseDouble(lodgingField.getText())
+                        * Integer.parseInt(daysField.getText()));
+                
+                double allowableExpenses = ((Integer.parseInt(daysField.getText())
+                        * (37 + 10 + 20 + 95))
+                        + (miles * 0.27));
+                
+                double difference = totalExpenses - allowableExpenses;
+                
+                totalLabel.setText("Total Expenses: " + totalExpenses + "$");
+                allowableLabel.setText("Allowable Expenses: " + allowableExpenses + "$");
+                
+                if (difference < 0) {
+                    savedLabel.setText("Amount Saved: " + difference + "$");
+                } else {
+                    excessLabel.setText("Excess: " + difference + "$");
+                }
             }
         };
         
         // Enable textFieldHandler & calculateHandler on all text fields and register
         daysField.setOnKeyReleased(textFieldHandler);
+        airfareField.setOnKeyReleased(textFieldHandler);
+        carFeesField.setOnKeyReleased(textFieldHandler);
+        parkingField.setOnKeyReleased(textFieldHandler);
+        lodgingField.setOnKeyReleased(textFieldHandler);
         carFeesField.setOnKeyReleased(textFieldHandler);
         milesField.setOnKeyReleased(textFieldHandler);
+        taxiField.setOnKeyReleased(textFieldHandler);
+        conferenceField.setOnKeyReleased(textFieldHandler);
+//        parkingField.setOnKeyReleased(textFieldHandler);
         calculateButton.setOnMouseClicked(calculateHandler);
         
         // Add and show scene
-        Scene scene = new Scene(root, 450, 350);
+        Scene scene = new Scene(root, 450, 400);
         primaryStage.setTitle("Business Travel Expenses Form");
         primaryStage.setScene(scene);
         primaryStage.show();
