@@ -1,0 +1,26 @@
+
+/* 
+    Created on : Sep 22, 2025, 2:43:43 PM
+    Author     : 6324151
+*/
+
+.root {
+    -fx-background-color: #00143b;
+    -fx-font-size: 10pt;
+    -fx-font-family: georgia;
+}
+
+.text-field {
+    -fx-background-color: #515f7a;
+    -fx-text-fill: white;
+    -fx-font-family: consolas;
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+.button {
+    -fx-background-color: #9abbfc;
+    -fx-font-family: consolas;
+}
