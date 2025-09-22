@@ -200,7 +200,8 @@ public class Lab4_graphenv extends Application {
                     miles = Double.parseDouble(milesField.getText());
                 }
                 
-                double totalExpenses = airfare
+                double totalExpenses = 
+                        airfare
                         + carFees
                         + parking
                         + taxi
@@ -208,7 +209,8 @@ public class Lab4_graphenv extends Application {
                         + (Double.parseDouble(lodgingField.getText())
                         * Integer.parseInt(daysField.getText()));
                 
-                double allowableExpenses = ((Integer.parseInt(daysField.getText())
+                double allowableExpenses = 
+                        ((Integer.parseInt(daysField.getText())
                         * (37 + 10 + 20 + 95))
                         + (miles * 0.27));
                 
