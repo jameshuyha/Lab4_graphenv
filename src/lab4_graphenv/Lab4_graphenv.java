@@ -148,6 +148,7 @@ public class Lab4_graphenv extends Application {
             }
         };
         
+        // Calculate total and allowable expenses
         EventHandler calculateHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
