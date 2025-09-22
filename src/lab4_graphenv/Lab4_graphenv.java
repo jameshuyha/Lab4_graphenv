@@ -95,8 +95,6 @@ public class Lab4_graphenv extends Application {
         
          // Disable calculate and parking by default
         calculateButton.setDisable(true);
-//        parkingField.setDisable(true);
-        
 
         // Disable register if clear is clicked
         clearButton.setOnMouseClicked(e -> {
@@ -111,7 +109,10 @@ public class Lab4_graphenv extends Application {
             calculateButton.setDisable(true);
             carFeesField.setDisable(false);
             milesField.setDisable(false);
-//            parkingField.setDisable(true);
+            totalLabel.setText("");
+            allowableLabel.setText("");
+            excessLabel.setText("");
+            savedLabel.setText("");
         });
         
         // Enable calculate once days field is filled
@@ -132,13 +133,6 @@ public class Lab4_graphenv extends Application {
                 } else {
                     calculateButton.setDisable(true);
                 }
-//                
-//                if (!(carFeesField.getText().isEmpty()
-//                        || milesField.getText().isEmpty())) {
-//                    parkingField.setDisable(false);
-//                } else {
-//                    parkingField.setDisable(true);
-//                }
                 
                 if (!carFeesField.getText().isEmpty()) {
                     milesField.setDisable(true);
@@ -157,6 +151,11 @@ public class Lab4_graphenv extends Application {
         EventHandler calculateHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
+                totalLabel.setText("");
+                allowableLabel.setText("");
+                excessLabel.setText("");
+                savedLabel.setText("");
+                
                 double airfare = 0;
                 double carFees = 0;
                 double parking = 0;
@@ -218,7 +217,7 @@ public class Lab4_graphenv extends Application {
                 allowableLabel.setText("Allowable Expenses: " + allowableExpenses + "$");
                 
                 if (difference < 0) {
-                    savedLabel.setText("Amount Saved: " + difference + "$");
+                    savedLabel.setText("Amount Saved: " + difference * -1 + "$");
                 } else {
                     excessLabel.setText("Excess: " + difference + "$");
                 }
@@ -235,12 +234,12 @@ public class Lab4_graphenv extends Application {
         milesField.setOnKeyReleased(textFieldHandler);
         taxiField.setOnKeyReleased(textFieldHandler);
         conferenceField.setOnKeyReleased(textFieldHandler);
-//        parkingField.setOnKeyReleased(textFieldHandler);
         calculateButton.setOnMouseClicked(calculateHandler);
         
         // Add and show scene
-        Scene scene = new Scene(root, 450, 400);
+        Scene scene = new Scene(root, 500, 425);
         primaryStage.setTitle("Business Travel Expenses Form");
+        scene.getStylesheets().add(getClass().getResource("StyleSheetHJVH.css").toString());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
